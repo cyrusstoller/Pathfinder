@@ -5,6 +5,7 @@ def main(options = {}, filenames = [])
   puts filenames
 end
 
+
 if __FILE__ == $PROGRAM_NAME
   options = {}
   opts = OptionParser.new do |opts|

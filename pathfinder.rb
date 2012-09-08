@@ -11,7 +11,20 @@ def main(options = {}, filenames = [])
 end
 
 def find_subpaths(filename, output_file, length)
+  file = File.new(filename, "r")
 
+  file.each_line("\r") do |line|
+    p return_paths(line.split(","))
+  end
+
+  file.close
+end
+
+def return_paths(array)
+  r = (array[2..-1]).map do |i|
+    i.to_i unless i.empty? or i == "\r"
+  end
+  r.compact
 end
 
 def finalize_options(options)

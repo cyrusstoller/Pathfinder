@@ -81,7 +81,7 @@ if __FILE__ == $PROGRAM_NAME
       options[:output_file] = o
     end
     
-    opts.on('-v', '--verbose', "Verbose mode") do |v|
+    opts.on( '-v', '--[no-]verbose', "Verbose mode" ) do |v|
       options[:verbose] = v
     end
   end

@@ -1,10 +1,26 @@
 require 'optparse'
+require 'yaml'
 
 def main(options = {}, filenames = [])
+  options = finalize_options(options)
   puts options
-  puts filenames
+  filenames.each do |file|
+    find_subpaths(file, options)
+  end
 end
 
+def find_subpaths(file, options = {})
+
+end
+
+def finalize_options(options)
+  default_options = YAML.load_file('defaults.yml')
+  res = { 
+          :length => default_options["path_length"], 
+          :output_file => default_options["output_file"]
+        }
+  res.merge(options)
+end
 
 if __FILE__ == $PROGRAM_NAME
   options = {}
@@ -20,7 +36,6 @@ if __FILE__ == $PROGRAM_NAME
       options[:length] = l
     end
     
-    options[:output_file] = "output.txt"
     opts.on('-o FILE', '--output=FILE', "Name of output file") do |o|
       options[:output_file] = o
     end

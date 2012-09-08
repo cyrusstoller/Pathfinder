@@ -11,18 +11,41 @@ def main(options = {}, filenames = [])
 end
 
 def find_subpaths(filename, output_file, length)
-  file = File.new(filename, "r")
+  input_file = File.new(filename, "r")
+  output_file << filename + "\n"
+  paths = {}
 
-  file.each_line("\r") do |line|
-    p return_paths(line.split(","))
+  input_file.each_line("\r") do |line|
+    path = return_paths(line.split(","))
+    total_path_length = path.size
+    if total_path_length >= length
+      i = 0
+      while total_path_length - length + 1 > i
+        sub_path = path[i...i+length]
+        key = sub_path.join("-")
+        if paths[key].nil?
+          paths[key] = 1
+        else
+          paths[key] += 1 
+        end
+        i += 1
+      end
+    end
   end
 
-  file.close
+  turn_paths_to_csv(paths, output_file)
+  input_file.close
+end
+
+def turn_paths_to_csv(paths, output_file)
+  paths.each do |k,v|
+    output_file << "#{k},#{v}\r\n"
+  end
 end
 
 def return_paths(array)
   r = (array[2..-1]).map do |i|
-    i.to_i unless i.empty? or i == "\r"
+    i.to_s.strip unless i.empty? or i == "\r"
   end
   r.compact
 end

@@ -3,13 +3,14 @@ require 'yaml'
 
 def main(options = {}, filenames = [])
   options = finalize_options(options)
-  puts options
-  filenames.each do |file|
-    find_subpaths(file, options)
+  output_file = File.open(options[:output_file], "w")
+  filenames.each do |filename|
+    find_subpaths(filename, output_file , options[:length])
   end
+  output_file.close
 end
 
-def find_subpaths(file, options = {})
+def find_subpaths(filename, output_file, length)
 
 end
 

@@ -1,14 +1,15 @@
 require 'optparse'
 
-def main(options = {})
-  p options
+def main(options = {}, filenames)
+  puts options
+  puts filenames
 end
 
 if __FILE__ == $PROGRAM_NAME
   options = {}
   OptionParser.new do |opts|
-    opts.banner = "Usage: pathfinder.rb [options]"
-
+    opts.banner = "Usage: pathfinder.rb [options] INFILE1 INFILE2"
+    
     opts.on( '-h', '--help', 'Help' ) do
       puts opts
       exit
@@ -17,7 +18,17 @@ if __FILE__ == $PROGRAM_NAME
     opts.on('-l LENGTH', '--length=LENGTH', Integer, "Length of the subpaths") do |l|
       options[:length] = l
     end
+    
+    options[:output_file] = "output.txt"
+    opts.on('-o FILE', '--output=FILE', "Name of output file") do |o|
+      options[:output_file] = o
+    end
   end.parse!
   
-  main(options)
+  if ARGV.empty?
+    puts "Oops you need to add at least one file to be analyzed"
+    exit
+  end
+  
+  main(options, ARGV)
 end

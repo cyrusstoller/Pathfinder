@@ -1,6 +1,7 @@
 .DS_STORE
 output*.txt
 *~
+*.csv
 
 *.gem
 *.rbc

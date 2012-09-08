@@ -24,7 +24,7 @@ def find_subpaths(filename, output_file, length)
       i = 0
       while total_path_length - length + 1 > i
         sub_path = path[i...i+length]
-        key = sub_path.join("-")
+        key = sub_path.join("-->")
         if paths[key].nil?
           paths[key] = 1
         else

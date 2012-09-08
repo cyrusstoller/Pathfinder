@@ -6,13 +6,13 @@ def main(options = {}, filenames = [])
   output_file = File.open(options[:output_file], "w")
   filenames.each do |filename|
     puts "Analyzing '#{filename}'"
-    find_subpaths(filename, output_file , options[:length])
+    find_subpaths(filename, output_file , options[:length], options[:verbose])
   end
   output_file.close
   puts "All jobs complete."
 end
 
-def find_subpaths(filename, output_file, length)
+def find_subpaths(filename, output_file, length, verbose = false)
   input_file = File.new(filename, "r")
   output_file << filename + "\n"
   paths = {}
@@ -35,13 +35,14 @@ def find_subpaths(filename, output_file, length)
     end
   end
 
-  turn_paths_to_csv(paths, output_file)
+  turn_paths_to_csv(paths, output_file, verbose)
   input_file.close
 end
 
-def turn_paths_to_csv(paths, output_file)
+def turn_paths_to_csv(paths, output_file, verbose = false)
   paths.each do |k,v|
     output_file << "#{k},#{v}\r\n"
+    puts "#{k},#{v}" if verbose
   end
 end
 
@@ -56,7 +57,8 @@ def finalize_options(options)
   default_options = YAML.load_file('defaults.yml')
   res = { 
           :length => default_options["path_length"], 
-          :output_file => default_options["output_file"]
+          :output_file => default_options["output_file"],
+          :verbose => default_options["verbose"]
         }
   res.merge(options)
 end
@@ -68,7 +70,7 @@ if __FILE__ == $PROGRAM_NAME
     
     opts.on( '-h', '--help', 'Help' ) do
       puts opts
-      exit
+      exit!
     end
     
     opts.on('-l LENGTH', '--length=LENGTH', Integer, "Length of the subpaths") do |l|
@@ -77,6 +79,10 @@ if __FILE__ == $PROGRAM_NAME
     
     opts.on('-o FILE', '--output=FILE', "Name of output file") do |o|
       options[:output_file] = o
+    end
+    
+    opts.on('-v', '--verbose', "Verbose mode") do |v|
+      options[:verbose] = v
     end
   end
   

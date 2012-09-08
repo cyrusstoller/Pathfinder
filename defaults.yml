@@ -1,3 +1,4 @@
 output_file: output.csv
 path_length: 2
 verbose: false
+header_rows: 0

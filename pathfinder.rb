@@ -1,5 +1,6 @@
 require 'optparse'
 require 'yaml'
+require 'csv'
 
 def main(options = {}, filenames = [])
   options = finalize_options(options)
@@ -13,12 +14,11 @@ def main(options = {}, filenames = [])
 end
 
 def find_subpaths(filename, output_file, length, verbose = false)
-  input_file = File.new(filename, "r")
   output_file << filename + "\n"
   paths = {}
 
-  input_file.each do |line|
-    path = return_paths(line.split(","))
+  CSV.parse(File.read(filename)).each do |row|
+    path = return_paths(row)
     total_path_length = path.size
     if total_path_length >= length
       i = 0
@@ -34,9 +34,7 @@ def find_subpaths(filename, output_file, length, verbose = false)
       end
     end
   end
-
   turn_paths_to_csv(paths, output_file, verbose)
-  input_file.close
 end
 
 def turn_paths_to_csv(paths, output_file, verbose = false)
@@ -48,7 +46,8 @@ end
 
 def return_paths(array)
   r = (array[2..-1]).map do |i|
-    i.to_s.strip unless i.empty? or i == "\r" or i == "\n"
+    i = i.to_s
+    i.strip unless i == "" or i == "\r" or i == "\n"
   end
   r.compact
 end

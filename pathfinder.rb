@@ -67,5 +67,5 @@ if __FILE__ == $PROGRAM_NAME
     exit
   end
   
-  main(options, ARGV)
+  main(options, opts.order(ARGV))
 end

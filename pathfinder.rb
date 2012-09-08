@@ -5,9 +5,11 @@ def main(options = {}, filenames = [])
   options = finalize_options(options)
   output_file = File.open(options[:output_file], "w")
   filenames.each do |filename|
+    puts "Analyzing '#{filename}'"
     find_subpaths(filename, output_file , options[:length])
   end
   output_file.close
+  puts "All jobs complete."
 end
 
 def find_subpaths(filename, output_file, length)

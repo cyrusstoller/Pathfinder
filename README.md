@@ -9,9 +9,10 @@ The output file has two columns. The first is a description of the path and the 
 ```
 Usage: pathfinder.rb [options] INFILE1 [INFILE2 ...]
     -h, --help                       Help
+    -i, --ignore-rows=NUM            Number of header rows to ignore
     -l, --length=LENGTH              Length of the subpaths
     -o, --output=FILE                Name of output file
-    -v, --[not-]verbose              Verbose mode
+    -v, --[no-]verbose               Verbose mode
 ```
 
 For example

@@ -16,5 +16,5 @@ Usage: pathfinder.rb [options] INFILE1 [INFILE2 ...]
 For example
 
 ```
-$ ruby pathfinder.rb data.csv -l 3
+$ ruby pathfinder.rb -l 3 data.csv
 ```

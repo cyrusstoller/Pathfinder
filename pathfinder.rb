@@ -17,7 +17,7 @@ def find_subpaths(filename, output_file, length, verbose = false)
   output_file << filename + "\n"
   paths = {}
 
-  input_file.each_line("\r") do |line|
+  input_file.each do |line|
     path = return_paths(line.split(","))
     total_path_length = path.size
     if total_path_length >= length

@@ -14,7 +14,7 @@ if __FILE__ == $PROGRAM_NAME
       exit
     end
     
-    opts.on('-l LENGTH', '--length=LENGTH', "Length of the subpaths") do |l|
+    opts.on('-l LENGTH', '--length=LENGTH', Integer, "Length of the subpaths") do |l|
       options[:length] = l
     end
   end.parse!

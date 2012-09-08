@@ -18,3 +18,5 @@ For example
 ```
 $ ruby pathfinder.rb -l 3 data.csv
 ```
+
+Command line options are assuming you're running Ruby 1.9.3

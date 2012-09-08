@@ -48,7 +48,7 @@ end
 
 def return_paths(array)
   r = (array[2..-1]).map do |i|
-    i.to_s.strip unless i.empty? or i == "\r"
+    i.to_s.strip unless i.empty? or i == "\r" or i == "\n"
   end
   r.compact
 end

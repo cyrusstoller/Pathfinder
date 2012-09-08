@@ -12,3 +12,9 @@ Usage: pathfinder.rb [options] INFILE1 [INFILE2 ...]
     -l, --length=LENGTH              Length of the subpaths
     -o, --output=FILE                Name of output file
 ```
+
+For example
+
+```
+$ ruby pathfinder.rb data.csv -l 3
+```

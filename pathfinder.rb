@@ -19,7 +19,7 @@ def find_subpaths(filename, output_file, length, options = {})
   reverse = options[:reverse] || false
   
   output_file << filename + "\n"
-  paths = {}
+  buckets = {}
   row_num = 0
 
   CSV.parse(File.read(filename)).each do |row|
@@ -34,27 +34,27 @@ def find_subpaths(filename, output_file, length, options = {})
         key = sub_path.join("-->")
         
         if reverse
-          if paths[row_num].nil?
-            paths[row_num] = [key]
+          if buckets[row_num].nil?
+            buckets[row_num] = [key]
           else
-            paths[row_num] << key
+            buckets[row_num] << key
           end
         else
-          if paths[key].nil?
-            paths[key] = 1
+          if buckets[key].nil?
+            buckets[key] = 1
           else
-            paths[key] += 1 
+            buckets[key] += 1 
           end
         end
         i += 1
       end
     end
   end
-  turn_paths_to_csv(paths, output_file, verbose)
+  turn_buckets_to_csv(buckets, output_file, verbose)
 end
 
-def turn_paths_to_csv(paths, output_file, verbose = false)
-  paths.each do |k,v|
+def turn_buckets_to_csv(buckets, output_file, verbose = false)
+  buckets.each do |k,v|
     row_string = [k, v].flatten.join(",")
     output_file << "#{row_string}\r\n"
     puts "#{row_string}" if verbose

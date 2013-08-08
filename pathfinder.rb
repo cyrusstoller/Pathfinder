@@ -29,10 +29,11 @@ def find_subpaths(filename, output_file, length, options = {})
     total_path_length = path.size
     if total_path_length >= length
       i = 0
+      participant_num = row[0]
       while total_path_length - length + 1 > i
         sub_path = path[i...i+length]
         sub_path_key = sub_path.join("-->")
-        buckets = add_to_bucket(buckets, i, row_num, sub_path_key, reverse)
+        buckets = add_to_bucket(buckets, i, row_num, sub_path_key, participant_num, reverse)
         i += 1
       end
     end
@@ -40,12 +41,12 @@ def find_subpaths(filename, output_file, length, options = {})
   turn_buckets_to_csv(buckets, output_file, verbose)
 end
 
-def add_to_bucket(buckets, i, row_num, sub_path_key, reverse)
+def add_to_bucket(buckets, i, row_num, sub_path_key, participant_num, reverse)
   if reverse
-    if buckets[row_num].nil?
-      buckets[row_num] = [sub_path_key]
+    if buckets[participant_num].nil?
+      buckets[participant_num] = [sub_path_key]
     else
-      buckets[row_num] << sub_path_key
+      buckets[participant_num] << sub_path_key
     end
   else
     if buckets[sub_path_key].nil?

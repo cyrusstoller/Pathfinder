@@ -41,8 +41,7 @@ def find_subpaths(filename, output_file, length, options = {})
 end
 
 def add_to_bucket(buckets, i, row_num, sub_path_key, participant_num, options = {})
-  reverse = options[:reverse] || false
-  if reverse
+  if options[:reverse]
     if buckets[participant_num].nil?
       buckets[participant_num] = [sub_path_key]
     else
@@ -80,6 +79,7 @@ def finalize_options(options)
           :length => default_options["path_length"], 
           :output_file => default_options["output_file"],
           :verbose => default_options["verbose"],
+          :reverse => default_options["reverse"],
           :header_rows => default_options["header_rows"]
         }
   res.merge(options)

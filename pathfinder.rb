@@ -7,13 +7,17 @@ def main(options = {}, filenames = [])
   output_file = File.open(options[:output_file], "w")
   filenames.each do |filename|
     puts "Analyzing '#{filename}'"
-    find_subpaths(filename, output_file , options[:length], options[:verbose], options[:header_rows])
+    find_subpaths(filename, output_file , options[:length], options)
   end
   output_file.close
   puts "All jobs complete."
 end
 
-def find_subpaths(filename, output_file, length, verbose = false, header_rows = 0)
+def find_subpaths(filename, output_file, length, options = {})
+  verbose = options[:verbose] || false
+  header_rows = options[:header_rows] || 0
+  reverse = options[:reverse] || false
+  
   output_file << filename + "\n"
   paths = {}
   row_num = 0
@@ -28,10 +32,19 @@ def find_subpaths(filename, output_file, length, verbose = false, header_rows = 
       while total_path_length - length + 1 > i
         sub_path = path[i...i+length]
         key = sub_path.join("-->")
-        if paths[key].nil?
-          paths[key] = 1
+        
+        if reverse
+          if paths[row_num].nil?
+            paths[row_num] = [key]
+          else
+            paths[row_num] << key
+          end
         else
-          paths[key] += 1 
+          if paths[key].nil?
+            paths[key] = 1
+          else
+            paths[key] += 1 
+          end
         end
         i += 1
       end
@@ -42,8 +55,9 @@ end
 
 def turn_paths_to_csv(paths, output_file, verbose = false)
   paths.each do |k,v|
-    output_file << "#{k},#{v}\r\n"
-    puts "#{k},#{v}" if verbose
+    row_string = [k, v].flatten.join(",")
+    output_file << "#{row_string}\r\n"
+    puts "#{row_string}" if verbose
   end
 end
 
@@ -86,6 +100,10 @@ if __FILE__ == $PROGRAM_NAME
     
     opts.on('-o FILE', '--output=FILE', "Name of output file") do |o|
       options[:output_file] = o
+    end
+    
+    opts.on('-r', '--reverse', "Reverse procedure find subpaths used by each user") do |r|
+      options[:reverse] = r
     end
     
     opts.on('-v', '--[no-]verbose', "Verbose mode" ) do |v|

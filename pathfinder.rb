@@ -16,10 +16,9 @@ end
 def find_subpaths(filename, output_file, length, options = {})
   verbose = options[:verbose] || false
   header_rows = options[:header_rows] || 0
-  reverse = options[:reverse] || false
   
   output_file << filename + "\n"
-  paths = {}
+  buckets = {}
   row_num = 0
 
   CSV.parse(File.read(filename)).each do |row|
@@ -29,32 +28,38 @@ def find_subpaths(filename, output_file, length, options = {})
     total_path_length = path.size
     if total_path_length >= length
       i = 0
+      participant_num = row[0]
       while total_path_length - length + 1 > i
         sub_path = path[i...i+length]
-        key = sub_path.join("-->")
-        
-        if reverse
-          if paths[row_num].nil?
-            paths[row_num] = [key]
-          else
-            paths[row_num] << key
-          end
-        else
-          if paths[key].nil?
-            paths[key] = 1
-          else
-            paths[key] += 1 
-          end
-        end
+        sub_path_key = sub_path.join("-->")
+        buckets = add_to_bucket(buckets, i, row_num, sub_path_key, participant_num, options)
         i += 1
       end
     end
   end
-  turn_paths_to_csv(paths, output_file, verbose)
+  turn_buckets_to_csv(buckets, output_file, verbose)
 end
 
-def turn_paths_to_csv(paths, output_file, verbose = false)
-  paths.each do |k,v|
+def add_to_bucket(buckets, i, row_num, sub_path_key, participant_num, options = {})
+  reverse = options[:reverse] || false
+  if reverse
+    if buckets[participant_num].nil?
+      buckets[participant_num] = [sub_path_key]
+    else
+      buckets[participant_num] << sub_path_key
+    end
+  else
+    if buckets[sub_path_key].nil?
+      buckets[sub_path_key] = 1
+    else
+      buckets[sub_path_key] += 1
+    end
+  end
+  return buckets
+end
+
+def turn_buckets_to_csv(buckets, output_file, verbose = false)
+  buckets.each do |k,v|
     row_string = [k, v].flatten.join(",")
     output_file << "#{row_string}\r\n"
     puts "#{row_string}" if verbose

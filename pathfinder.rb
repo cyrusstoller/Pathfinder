@@ -16,7 +16,6 @@ end
 def find_subpaths(filename, output_file, length, options = {})
   verbose = options[:verbose] || false
   header_rows = options[:header_rows] || 0
-  reverse = options[:reverse] || false
   
   output_file << filename + "\n"
   buckets = {}
@@ -33,7 +32,7 @@ def find_subpaths(filename, output_file, length, options = {})
       while total_path_length - length + 1 > i
         sub_path = path[i...i+length]
         sub_path_key = sub_path.join("-->")
-        buckets = add_to_bucket(buckets, i, row_num, sub_path_key, participant_num, reverse)
+        buckets = add_to_bucket(buckets, i, row_num, sub_path_key, participant_num, options)
         i += 1
       end
     end
@@ -41,7 +40,8 @@ def find_subpaths(filename, output_file, length, options = {})
   turn_buckets_to_csv(buckets, output_file, verbose)
 end
 
-def add_to_bucket(buckets, i, row_num, sub_path_key, participant_num, reverse)
+def add_to_bucket(buckets, i, row_num, sub_path_key, participant_num, options = {})
+  reverse = options[:reverse] || false
   if reverse
     if buckets[participant_num].nil?
       buckets[participant_num] = [sub_path_key]

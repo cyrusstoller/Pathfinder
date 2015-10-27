@@ -22,4 +22,4 @@ For example
 $ ruby pathfinder.rb -l 3 data.csv
 ```
 
-CSV parser assumes you're running Ruby 1.9.3
+CSV parser assumes you're running Ruby 2.1.6
